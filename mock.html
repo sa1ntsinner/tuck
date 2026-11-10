@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="/src/style.css" />
+<script>
+  // The deck is 420x640; other windows take the whole browser window.
+  if ((new URLSearchParams(location.search).get("w") || "deck") === "deck")
+    document.write("<style>html{width:420px!important;height:640px!important;position:relative}</style>");
+</script>
+<script>
+  // Dev harness: fakes the Tauri backend so any screen renders in a plain browser.
+  // Run `npm run dev`, then open http://localhost:1430/mock.html with options:
+  //   ?w=capture|deck   which window      ?theme=dark       ?demo=1  sample notes
+  //   ?dests=0          no destinations   ?click=A|B        click buttons by text, in order
+  const q = new URLSearchParams(location.search);
+  const ago = (min) => Date.now() - min * 60000;
+  const DEMO = q.get("demo") ? [
+    { id: "n1", created: ago(4), text: "Ask Sam about the invoice before Friday @fri", color: "butter", app: "", title: "", pin: null, remind: null, to: null, sent: null, sent_at: null },
+    { id: "n2", created: ago(38), text: "Book idea: a field guide to city birds #ideas", color: "rose", app: "", title: "", pin: null, remind: null, to: null, sent: null, sent_at: null },
+    { id: "n3", created: ago(95), text: "Groceries\n- [ ] oat milk\n- [ ] lemons\n- [ ] coffee", color: "sky", app: "", title: "", pin: null, remind: null, to: null, sent: null, sent_at: null },
+  ] : [];
+  const CTX = { mode: "note", app: "", exe: "", title: "", clip: "", call: "", by_mouse: false };
+  const S = {
+    capture_key: "Alt+Q", sticky_key: "Alt+W", deck_key: "Alt+Shift+Q", middle_hold: true, hold_ms: 320, excluded: [],
+    dests: q.get("dests") === "0" ? [] : [
+      { id: "a", name: "Obsidian", kind: "obsidian", path: "C:\\Users\\me\\Obsidian", mode: "daily", file: "", page: "", token: "" },
+      { id: "b", name: "Todoist", kind: "todoist", path: "", mode: "daily", file: "", page: "", token: "•" },
+    ],
+    default_dest: "a", rules: [], keep_source: true, theme: q.get("theme") || "light", seen_intro: true, calls: true, quiet_apps: [],
+    ai_provider: "claude-code", ai_key: "", ai_model: "", ai_url: "", note_w: 640, note_h: 170,
+    inbox: "C:\\Users\\me\\Obsidian\\Inbox", library: "C:\\Users\\me\\Obsidian", sort_auto: "off", skill_auto: true,
+  };
+  const R = {
+    get_settings: S, set_settings: { failed: [] }, autostart: true, vaults: [],
+    sort_state: { ready: true, library: S.library, inbox: S.inbox, inbox_ok: true, agents: ["Claude Code", "Codex"] },
+    providers: [{ id: "claude-code", name: "Claude Code", kind: "cli", ready: true, state: "Signed in" }],
+    models: [], notes: DEMO, ctx: CTX, found_apps: [
+      { kind: "obsidian", name: "Obsidian", path: "C:\\Users\\me\\Obsidian" },
+      { kind: "obsidian", name: "Work", path: "C:\\Users\\me\\Work" },
+      { kind: "joplin", name: "Joplin", path: "" },
+    ],
+    anytype_challenge: "abc", notion_pages: [{ id: "1", title: "Inbox" }, { id: "2", title: "Reading list" }],
+  };
+  let cb = 0;
+  window.__TAURI_INTERNALS__ = {
+    metadata: { currentWindow: { label: q.get("w") || "deck" }, currentWebview: { label: q.get("w") || "deck", windowLabel: q.get("w") || "deck" } },
+    transformCallback: (f) => { const id = ++cb; window["_" + id] = f; return id; },
+    unregisterCallback: () => {},
+    convertFileSrc: (s) => s,
+    invoke: async (cmd, args) => {
+      if (cmd.startsWith("plugin:")) return 1;
+      if (cmd === "notes") return args.scope === "deck" ? DEMO : [];
+      if (cmd === "connect") return args.kind === "joplin" ? new Promise(() => {}) : "Inbox";
+      return R[cmd] ?? null;
+    },
+  };
+  window.__TAURI_EVENT_PLUGIN_INTERNALS__ = { unregisterListener: () => {} };
+  // ?click=Settings|Connect an app|Obsidian clicks buttons by their text or label, in order.
+  addEventListener("load", async () => {
+    const steps = (q.get("click") || "").split("|").filter(Boolean);
+    for (const t of steps) {
+      await new Promise((r) => setTimeout(r, 500));
+      const b = [...document.querySelectorAll("button")].reverse().find((x) => x.textContent.trim() === t || x.querySelector(".label")?.textContent === t || x.getAttribute("aria-label") === t);
+      b?.click();
+    }
+    await new Promise((r) => setTimeout(r, 500));
+    const el = [...document.querySelectorAll("h2")].find((x) => x.textContent === (q.get("scroll") || ""));
+    el?.scrollIntoView();
+  });
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

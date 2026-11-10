@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Tuck",
+  "version": "0.1.0",
+  "identifier": "app.tuck.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1430",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: asset:; connect-src ipc: http://ipc.localhost"
+    },
+    "windows": [
+      {
+        "label": "capture",
+        "url": "index.html?w=capture",
+        "title": "Tuck",
+        "width": 640,
+        "height": 170,
+        "minWidth": 420,
+        "minHeight": 130,
+        "visible": false,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": true,
+        "focus": false
+      },
+      {
+        "label": "deck",
+        "url": "index.html?w=deck",
+        "title": "Tuck Deck",
+        "width": 420,
+        "height": 640,
+        "visible": false,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "focus": false
+      },
+      {
+        "label": "toast",
+        "url": "index.html?w=toast",
+        "title": "Tuck",
+        "width": 380,
+        "height": 120,
+        "visible": false,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "focus": false
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico"],
+    "shortDescription": "Catch a thought before it's gone.",
+    "publisher": "Elmir",
+    "windows": {
+      "nsis": { "installMode": "currentUser" }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2926"/>
+      <stop offset="1" stop-color="#171614"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset="1" stop-color="#efe6d4"/>
+    </linearGradient>
+    <linearGradient id="pocket" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f08a3e"/>
+      <stop offset="1" stop-color="#d9672a"/>
+    </linearGradient>
+  </defs>
+  <rect x="32" y="32" width="960" height="960" rx="224" fill="url(#bg)"/>
+  <g transform="rotate(-8 512 512)">
+    <rect x="300" y="188" width="424" height="520" rx="44" fill="url(#card)"/>
+    <rect x="364" y="282" width="236" height="30" rx="15" fill="#2a2926" opacity=".85"/>
+    <rect x="364" y="350" width="296" height="22" rx="11" fill="#2a2926" opacity=".28"/>
+    <rect x="364" y="400" width="250" height="22" rx="11" fill="#2a2926" opacity=".28"/>
+  </g>
+  <path d="M220 560 H804 a40 40 0 0 1 40 40 V760 a72 72 0 0 1 -72 72 H252 a72 72 0 0 1 -72 -72 V600 a40 40 0 0 1 40 -40 Z" fill="url(#pocket)"/>
+  <path d="M220 560 H804 a40 40 0 0 1 40 40 V612 H180 V600 a40 40 0 0 1 40 -40 Z" fill="#ffffff" opacity=".18"/>
+</svg>
